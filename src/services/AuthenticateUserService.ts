@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 /**
  * Receive code (string)
  * Recovery the github access_token
@@ -8,5 +10,20 @@
  */
 
 export class AuthenticateUserService {
-	async execute(code: string) {}
+	async execute(code: string) {
+		const url = 'https://github.com/login/oauth/access_token';
+
+		const response = await axios.post(url, null, {
+			params: {
+				client_id: process.env.GITHUB_CLIENT_ID,
+				client_secret: process.env.GITHUB_CLIENT_SECRET,
+				code,
+			},
+			headers: {
+				Accept: 'application/json',
+			},
+		});
+
+		return response.data;
+	}
 }
